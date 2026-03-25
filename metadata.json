@@ -1,0 +1,5 @@
+{
+  "name": "ClipEdit AI",
+  "description": "Paste an image from your clipboard, add a prompt, and let AI transform it.",
+  "requestFramePermissions": ["clipboard-read", "clipboard-write"]
+}
