@@ -73,7 +73,7 @@ const Row: React.FC<RowProps> = ({
   return (
     <div 
       onClick={onFocus}
-      className={`grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-3xl border-2 transition-all duration-300 ${
+      className={`grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 rounded-3xl border-2 transition-all duration-300 ${
         isActive ? 'border-orange-500/50 bg-zinc-900/50 shadow-lg shadow-orange-500/5' : 'border-zinc-800 bg-transparent'
       }`}
     >
