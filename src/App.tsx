@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { Clipboard, Image as ImageIcon, Send, Loader2, RefreshCw, Layers } from 'lucide-react';
+import { Clipboard, Image as ImageIcon, Send, Loader2, RefreshCw, Layers, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Initialize Gemini API
@@ -31,6 +31,7 @@ const Row: React.FC<RowProps> = ({
   onFocus 
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -48,6 +49,25 @@ const Row: React.FC<RowProps> = ({
       isLoading: false,
       error: null
     });
+  };
+
+  const handleCopyResult = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!data.resultImage) return;
+
+    try {
+      const response = await fetch(data.resultImage);
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob
+        })
+      ]);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy image:', err);
+    }
   };
 
   return (
@@ -162,18 +182,38 @@ const Row: React.FC<RowProps> = ({
             )}
           </div>
 
-          <div className="flex-1 rounded-xl border-2 border-dashed border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center overflow-hidden min-h-[200px]">
+          <div 
+            onClick={handleCopyResult}
+            className={`flex-1 rounded-xl border-2 border-dashed border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center overflow-hidden min-h-[200px] relative ${data.resultImage ? 'cursor-copy group/result' : ''}`}
+          >
             <AnimatePresence mode="wait">
               {data.resultImage ? (
-                <motion.img 
-                  key="result"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  src={data.resultImage} 
-                  alt="Result" 
-                  className="w-full h-full object-contain"
-                  referrerPolicy="no-referrer"
-                />
+                <>
+                  <motion.img 
+                    key="result"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    src={data.resultImage} 
+                    alt="Result" 
+                    className="w-full h-full object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/result:opacity-100 transition-opacity flex items-center justify-center">
+                    <p className="text-white text-[10px] font-mono uppercase tracking-widest flex items-center gap-2">
+                      <Clipboard className="w-3 h-3" /> Click to Copy
+                    </p>
+                  </div>
+                  {isCopied && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest flex items-center gap-2 shadow-lg"
+                    >
+                      <Check className="w-3 h-3" /> Copied!
+                    </motion.div>
+                  )}
+                </>
               ) : (
                 <motion.div 
                   key="placeholder"

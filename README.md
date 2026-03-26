@@ -1,20 +1,64 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ClipEdit AI
 
-# Run and deploy your AI Studio app
+ClipEdit AI is a powerful, multi-row image transformation tool powered by Gemini AI. It allows you to paste images, describe the changes you want, and generate new versions in parallel.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/259b31b6-3b48-4238-8e10-7d6bc3de7026
+- **Multi-Row Workflow**: Process up to 10 images simultaneously.
+- **Direct Paste**: Focus a row and press `Ctrl+V` to paste an image from your clipboard.
+- **AI-Powered Transformations**: Uses `gemini-2.5-flash-image` for high-quality image-to-image editing.
+- **Click-to-Copy**: Instantly copy generated results back to your clipboard with a single click.
+- **Parallel Processing**: Each row operates independently with its own loading state and error handling.
+- **Responsive Design**: Clean, dark-themed brutalist UI that works on all screen sizes.
 
-## Run Locally
+## Prerequisites
 
-**Prerequisites:**  Node.js
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/)
+- A Google Gemini API Key
 
+## Setup
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repo-url>
+   cd clipedit-ai
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root directory and add your Gemini API key:
+   ```env
+   GEMINI_API_KEY=your_actual_api_key_here
+   ```
+   *Note: You can get an API key from the [Google AI Studio](https://aistudio.google.com/).*
+
+## Running the App
+
+Start the development server:
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+## How to Use
+
+1. **Set Row Count**: Use the "Rows" input at the top to add or remove processing slots.
+2. **Focus a Row**: Click anywhere on a row to make it active (highlighted in orange).
+3. **Paste Image**: Press `Ctrl+V` to paste the image you want to transform.
+4. **Enter Prompt**: Describe the transformation (e.g., "Make it look like a 1950s oil painting").
+5. **Process**: Click "Process Row" to start the generation.
+6. **Copy Result**: Once generated, click the result image to copy it to your clipboard.
+
+## Tech Stack
+
+- **Frontend**: React, Vite, TypeScript
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Animations**: Motion (framer-motion)
+- **AI SDK**: @google/genai
